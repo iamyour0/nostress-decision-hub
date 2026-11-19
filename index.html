@@ -32,6 +32,34 @@ canvas{display:block;max-width:100%;height:auto;margin:8px auto}.wheelWrap{displ
 .hidden{display:none!important}.muted{color:var(--muted);font-size:12px;line-height:1.5}.history{font-size:12px;color:var(--muted);margin-top:10px;max-height:100px;overflow:auto}
 footer{text-align:center;color:#7788a6;font-size:12px;padding:22px}
 @media(max-width:760px){header{padding:20px 14px 10px}main{padding:10px 14px 35px}.layout{grid-template-columns:1fr}.tool.wide{grid-column:auto}.wheelWrap{grid-template-columns:1fr}.hero{padding:18px}.heroIcon{display:none}}
+
+/* Decision Hub visual upgrades */
+.wheelControls{display:grid;grid-template-columns:130px 1fr;gap:10px;align-items:end;margin-bottom:8px}
+.wheelControls label{margin-top:0}
+#wheel{cursor:crosshair}
+.visualStage{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;min-height:132px;padding:12px;background:#0b1729;border:1px solid var(--line);border-radius:14px;margin:12px 0}
+.die{width:76px;height:76px;border-radius:17px;background:linear-gradient(145deg,#fff,#cbd7ed);color:#172238;box-shadow:inset -5px -6px 10px #8795ad,0 8px 18px #0005;display:grid;place-items:center;font-size:34px;font-weight:900;position:relative;transform:rotate(0) scale(1)}
+.die.rolling{animation:dieRoll .78s cubic-bezier(.2,.8,.2,1)}
+@keyframes dieRoll{0%{transform:rotate(0) translateY(0) scale(1)}25%{transform:rotate(100deg) translateY(-20px) scale(1.08)}50%{transform:rotate(230deg) translateY(0) scale(.94)}75%{transform:rotate(330deg) translateY(-9px) scale(1.04)}100%{transform:rotate(360deg) translateY(0) scale(1)}}
+.coin3d{width:92px;height:92px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 30% 25%,#fff0a8,#e5ad32 52%,#986314);border:6px double #f8d879;color:#67420b;font-weight:900;font-size:15px;box-shadow:0 8px 18px #0006;backface-visibility:hidden}
+.coin3d.flipping{animation:coinFlip 1.15s ease-in-out}
+@keyframes coinFlip{0%{transform:perspective(500px) rotateY(0) rotateX(0)}50%{transform:perspective(500px) rotateY(900deg) rotateX(22deg) scale(1.12)}100%{transform:perspective(500px) rotateY(1800deg) rotateX(0)}}
+.capsuleStage{min-height:150px;display:flex;align-items:center;justify-content:center;gap:16px;background:#0b1729;border:1px solid var(--line);border-radius:14px;margin:12px 0;padding:14px;flex-wrap:wrap}
+.capsule{width:76px;height:112px;border-radius:40px;background:linear-gradient(90deg,#ff7d91,#ffb1bd 45%,#e94f70);border:4px solid #ffd4dc;box-shadow:inset -8px 0 12px #a42e4d66,0 9px 20px #0006;position:relative;transform-origin:center;overflow:hidden}
+.capsule:before{content:"";position:absolute;left:0;right:0;top:50%;height:4px;background:#ffe0e6;box-shadow:0 1px 4px #922b4c}
+.capsule:after{content:"";position:absolute;left:10px;top:10px;width:10px;height:30px;border-radius:10px;background:#ffffff66}
+.capsule.shaking{animation:capsuleShake .12s infinite alternate}
+.capsule.open{animation:capsuleOpen .65s forwards}
+@keyframes capsuleShake{from{transform:rotate(-12deg) translateY(-3px)}to{transform:rotate(12deg) translateY(3px)}}
+@keyframes capsuleOpen{0%{transform:rotate(0) scale(1)}45%{transform:rotate(18deg) scale(1.08)}100%{transform:rotate(24deg) translateY(-12px) scale(.82);opacity:.25}}
+.teamGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;width:100%;text-align:left}
+.teamCard{border:1px solid #ffffff30;border-radius:14px;padding:12px;min-height:105px;box-shadow:0 8px 18px #0003}
+.teamCard h4{margin:0 0 9px;font-size:15px;color:#fff}
+.teamMember{background:#07132355;border-radius:8px;padding:7px 9px;margin-top:6px;font-size:13px}
+.ladderLabels{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ladderEndpoint{font-size:12px;color:var(--muted);margin-top:7px}
+@media(max-width:600px){.wheelControls{grid-template-columns:1fr 1fr}.ladderLabels{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -57,7 +85,7 @@ footer{text-align:center;color:#7788a6;font-size:12px;padding:22px}
   <article class="tool wide" id="wheelTool">
    <div class="toolHead"><span class="toolIcon">🎡</span><div><h3 data-i18n="wheelTitle">Decision Wheel</h3><div class="sub" data-i18n="wheelSub">Add choices and spin the wheel.</div></div></div>
    <div class="wheelWrap"><div><div class="pointer">▼</div><canvas id="wheel" width="440" height="440"></canvas><div class="row"><button class="btn gold" id="spinBtn" data-i18n="spin">SPIN THE WHEEL</button><button class="btn secondary small" id="resetWheel" data-i18n="reset">Reset</button></div></div>
-    <div><label data-i18n="optionsLabel">Your options (one per line)</label><textarea id="wheelOptions">Pizza
+    <div><div class="wheelControls"><div><label for="wheelSlotCount">Number of slots</label><input id="wheelSlotCount" type="number" min="2" max="100" value="6"></div><div class="muted" style="padding-bottom:10px">Double-click a wheel slice to edit that choice. Duplicate choices are allowed.</div></div><label data-i18n="optionsLabel">Your options (one per line)</label><textarea id="wheelOptions">Pizza
 Sushi
 Burger
 Pasta
@@ -67,13 +95,14 @@ Tacos</textarea><div class="row"><button class="btn secondary" id="applyWheel" d
   </article>
   <article class="tool wide hidden" id="ladderTool">
    <div class="toolHead"><span class="toolIcon">🪜</span><div><h3 data-i18n="ladderTitle">Ladder Game</h3><div class="sub" data-i18n="ladderSub">Connect players to shuffled outcomes.</div></div></div>
-   <div class="row"><div><label data-i18n="players">Players (one per line)</label><textarea id="ladderPlayers">Alex
+   <div class="ladderLabels"><div><label data-i18n="players">Start points (one per line)</label><textarea id="ladderPlayers">Alex
 Blair
 Casey
-Drew</textarea></div><div><label data-i18n="outcomes">Outcomes (one per line)</label><textarea id="ladderOutcomes">Coffee
+Drew</textarea></div><div><label data-i18n="outcomes">Destination points (one per line)</label><textarea id="ladderOutcomes">Coffee
 Tea
 Juice
 Water</textarea></div></div>
+   <div class="muted">Enter the same number of start and destination labels. Duplicate labels are allowed. The middle rungs stay hidden until you reveal the paths.</div>
    <div class="row"><button class="btn" id="makeLadder" data-i18n="makeLadder">Create ladder</button><button class="btn teal" id="runLadder" data-i18n="runLadder">Reveal paths</button><button class="btn secondary" id="shuffleLadder" data-i18n="shuffle">Shuffle outcomes</button></div>
    <canvas id="ladderCanvas" width="900" height="430"></canvas><div class="result" id="ladderResult" data-i18n="ladderHint">Create a ladder to see the matches.</div>
    <div class="muted" data-i18n="ladderNote">The ladder is generated randomly in your browser. Each player gets one unique outcome.</div>
@@ -81,12 +110,12 @@ Water</textarea></div></div>
   <article class="tool hidden" id="diceTool">
    <div class="toolHead"><span class="toolIcon">🎲</span><div><h3 data-i18n="diceTitle">Dice Roller</h3><div class="sub" data-i18n="diceSub">Roll standard or polyhedral dice.</div></div></div>
    <div class="row"><div><label data-i18n="sides">Number of sides</label><select id="diceSides"><option>4</option><option>6</option><option>8</option><option>10</option><option>12</option><option>20</option><option>100</option></select></div><div><label data-i18n="count">Number of dice</label><input id="diceCount" type="number" min="1" max="20" value="2"></div></div>
-   <button class="btn" id="rollDice" data-i18n="roll">ROLL DICE</button><div class="result" id="diceResult">🎲 🎲</div><div class="history" id="diceHistory"></div>
+   <button class="btn" id="rollDice" data-i18n="roll">ROLL DICE</button><div class="visualStage" id="diceStage"><div class="die">⚄</div><div class="die">⚂</div></div><div class="result" id="diceResult">🎲 🎲</div><div class="history" id="diceHistory"></div>
   </article>
   <article class="tool hidden" id="coinTool">
    <div class="toolHead"><span class="toolIcon">🪙</span><div><h3 data-i18n="coinTitle">Coin Flip</h3><div class="sub" data-i18n="coinSub">Heads or tails. Make a quick call.</div></div></div>
    <label data-i18n="flipCount">Number of flips</label><select id="coinCount"><option value="1">1</option><option value="5">5</option><option value="10">10</option><option value="50">50</option><option value="100">100</option></select>
-   <button class="btn gold" id="flipCoin" data-i18n="flip">FLIP COIN</button><div class="result" id="coinResult">🪙</div><div class="history" id="coinHistory"></div>
+   <button class="btn gold" id="flipCoin" data-i18n="flip">FLIP COIN</button><div class="visualStage" id="coinStage"><div class="coin3d">HEADS</div></div><div class="result" id="coinResult">🪙</div><div class="history" id="coinHistory"></div>
   </article>
   <article class="tool hidden" id="namesTool">
    <div class="toolHead"><span class="toolIcon">👤</span><div><h3 data-i18n="namesTitle">Random Name Picker</h3><div class="sub" data-i18n="namesSub">Pick one or more names fairly.</div></div></div>
@@ -96,7 +125,7 @@ Casey
 Drew
 Elliot</textarea>
    <div class="row"><div><label data-i18n="winnerCount">Number of picks</label><input id="winnerCount" type="number" min="1" max="100" value="1"></div><label class="row small" style="margin-top:27px"><input id="noRepeat" type="checkbox" checked style="width:auto"> <span data-i18n="noRepeat">No repeats</span></label></div>
-   <button class="btn" id="pickNames" data-i18n="pick">PICK NAME(S)</button><div class="result" id="nameResult" data-i18n="pickHint">Your selected name(s) will appear here.</div>
+   <button class="btn" id="pickNames" data-i18n="pick">PICK NAME(S)</button><div class="capsuleStage" id="capsuleStage"><div class="capsule"></div><div class="muted">The capsule will open to reveal the selected name.</div></div><div class="result" id="nameResult" data-i18n="pickHint">Your selected name(s) will appear here.</div>
   </article>
   <article class="tool hidden" id="teamsTool">
    <div class="toolHead"><span class="toolIcon">👥</span><div><h3 data-i18n="teamsTitle">Random Team Generator</h3><div class="sub" data-i18n="teamsSub">Split a group into balanced teams.</div></div></div>
@@ -153,19 +182,108 @@ function lines(id){return $(id).value.split(/\r?\n/).map(x=>x.trim()).filter(Boo
 function show(id,html){$(id).innerHTML=html}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.tool[id]').forEach(x=>x.classList.toggle('hidden',x.id!==b.dataset.target))}));
-function drawWheel(){const c=$('wheel'),ctx=c.getContext('2d'),cx=220,cy=220,r=205;ctx.clearRect(0,0,440,440);if(!wheelItems.length){ctx.fillStyle='#263957';ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill();ctx.fillStyle='white';ctx.textAlign='center';ctx.font='20px Arial';ctx.fillText('Add options',cx,cy);return}const colors=['#7898ff','#52cbbb','#ffbf69','#ed86a7','#a88bff','#69b9ed','#f08c62','#a6d977'];const step=Math.PI*2/wheelItems.length;wheelItems.forEach((item,i)=>{const a=wheelAngle+i*step-Math.PI/2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,a,a+step);ctx.closePath();ctx.fillStyle=colors[i%colors.length];ctx.fill();ctx.strokeStyle='#101a2d';ctx.lineWidth=2;ctx.stroke();ctx.save();ctx.translate(cx,cy);ctx.rotate(a+step/2);ctx.textAlign='right';ctx.fillStyle='#10192b';ctx.font='bold 15px Arial';let txt=item;while(ctx.measureText(txt).width>145&&txt.length>4)txt=txt.slice(0,-2)+'…';ctx.fillText(txt,r-16,5);ctx.restore()});ctx.beginPath();ctx.arc(cx,cy,28,0,Math.PI*2);ctx.fillStyle='#f4f7ff';ctx.fill();ctx.fillStyle='#142039';ctx.font='bold 15px Arial';ctx.textAlign='center';ctx.fillText('GO',cx,225)}
-function updateWheel(){wheelItems=lines('wheelOptions').slice(0,100);wheelAngle=0;drawWheel();$('wheelResult').textContent=tr('spinHint')}
-$('applyWheel').onclick=updateWheel;$('resetWheel').onclick=()=>{$('wheelOptions').value='Pizza\nSushi\nBurger\nPasta\nSalad\nTacos';updateWheel()};updateWheel();
-$('spinBtn').onclick=()=>{if(wheelBusy)return;if(!wheelItems.length){$('wheelResult').textContent=tr('invalid');return}wheelBusy=true;const win=randInt(wheelItems.length),step=2*Math.PI/wheelItems.length;const current=((wheelAngle%(2*Math.PI))+2*Math.PI)%(2*Math.PI);const target=-((win*step+step/2));let delta=((target-current)%(2*Math.PI)+2*Math.PI)%(2*Math.PI)+Math.PI*2*6;const start=wheelAngle,duration=4200,t0=performance.now();function anim(t){let x=Math.min(1,(t-t0)/duration),ease=1-Math.pow(1-x,4);wheelAngle=start+delta*ease;drawWheel();if(x<1)requestAnimationFrame(anim);else{wheelAngle=((wheelAngle%(2*Math.PI))+2*Math.PI)%(2*Math.PI);drawWheel();$('wheelResult').innerHTML='<strong>'+esc(wheelItems[win])+'</strong>';wheelBusy=false}}requestAnimationFrame(anim)};
-$('removeWinner').onclick=()=>{const m=$('wheelResult').querySelector('strong');if(!m)return;const v=m.textContent;const i=wheelItems.indexOf(v);if(i>=0){wheelItems.splice(i,1);$('wheelOptions').value=wheelItems.join('\n');drawWheel();$('wheelResult').textContent=wheelItems.length?tr('done'):tr('invalid')}};
-function makeLadder(){const p=lines('ladderPlayers'),o=lines('ladderOutcomes');if(p.length<2||p.length!==o.length||p.length>12){$('ladderResult').textContent=tr('invalid');return}const n=p.length,rows=9+randInt(5),rungs=[];for(let y=0;y<rows;y++){let row=[];for(let x=0;x<n-1;x++)row.push(false);for(let x=0;x<n-1;x++){if((x===0||!row[x-1])&&randInt(100)<43)row[x]=true}rungs.push(row)}ladderData={p,o:shuffle(o),rungs,rows,paths:[]};drawLadder(false);$('ladderResult').textContent=tr('ladderHint')}
-function drawLadder(reveal){const c=$('ladderCanvas'),ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);if(!ladderData){ctx.fillStyle='#a9b6cc';ctx.font='18px Arial';ctx.textAlign='center';ctx.fillText('Create a ladder',450,210);return}const {p,o,rungs,rows}=ladderData,n=p.length,left=65,right=835,top=70,bottom=350,dx=(right-left)/(n-1),dy=(bottom-top)/rows;ctx.lineWidth=4;ctx.strokeStyle='#7898ff';for(let x=0;x<n;x++){ctx.beginPath();ctx.moveTo(left+x*dx,top-15);ctx.lineTo(left+x*dx,bottom+15);ctx.stroke()}ctx.strokeStyle='#52cbbb';ctx.lineWidth=5;rungs.forEach((row,y)=>row.forEach((v,x)=>{if(v){ctx.beginPath();ctx.moveTo(left+x*dx,top+y*dy);ctx.lineTo(left+(x+1)*dx,top+y*dy);ctx.stroke()}}));ctx.font='bold 14px Arial';ctx.textAlign='center';p.forEach((v,i)=>{ctx.fillStyle='#f4f7ff';ctx.fillText(v.slice(0,12),left+i*dx,32);ctx.fillStyle='#ffd166';ctx.fillText(o[ladderData.paths[i]??i].slice(0,12),left+i*dx,405)});if(reveal&&ladderData.paths){ctx.strokeStyle='#ffbf69';ctx.lineWidth=3;ladderData.paths.forEach((end,start)=>{let x=start,y=0;ctx.beginPath();ctx.moveTo(left+x*dx,top-15);for(let yy=0;yy<rows;yy++){ctx.lineTo(left+x*dx,top+yy*dy);if(x<n-1&&rungs[yy][x]){ctx.lineTo(left+(x+1)*dx,top+yy*dy);x++}else if(x>0&&rungs[yy][x-1]){ctx.lineTo(left+(x-1)*dx,top+yy*dy);x--}}ctx.lineTo(left+x*dx,bottom+15);ctx.stroke()})}}
+
+function drawWheel(){
+ const c=$('wheel'),ctx=c.getContext('2d'),cx=220,cy=220,r=205;
+ ctx.clearRect(0,0,440,440);
+ if(!wheelItems.length){ctx.fillStyle='#263957';ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill();ctx.fillStyle='white';ctx.textAlign='center';ctx.font='20px Arial';ctx.fillText('Add options',cx,cy);return}
+ const colors=['#7898ff','#52cbbb','#ffbf69','#ed86a7','#a88bff','#69b9ed','#f08c62','#a6d977'];
+ const step=Math.PI*2/wheelItems.length;
+ wheelItems.forEach((item,i)=>{
+  const a=wheelAngle+i*step-Math.PI/2;
+  ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,a,a+step);ctx.closePath();ctx.fillStyle=colors[i%colors.length];ctx.fill();ctx.strokeStyle='#101a2d';ctx.lineWidth=2;ctx.stroke();
+  ctx.save();ctx.translate(cx,cy);ctx.rotate(a+step/2);ctx.textAlign='right';ctx.fillStyle='#10192b';ctx.font='bold 15px Arial';let txt=item;while(ctx.measureText(txt).width>145&&txt.length>4)txt=txt.slice(0,-2)+'…';ctx.fillText(txt,r-16,5);ctx.restore();
+ });
+ ctx.beginPath();ctx.arc(cx,cy,28,0,Math.PI*2);ctx.fillStyle='#f4f7ff';ctx.fill();ctx.fillStyle='#142039';ctx.font='bold 15px Arial';ctx.textAlign='center';ctx.fillText('GO',cx,225)
+}
+function updateWheel(){
+ const wanted=Math.max(2,Math.min(100,parseInt($('wheelSlotCount').value,10)||6));
+ let next=lines('wheelOptions').slice(0,100);
+ if(next.length<wanted){while(next.length<wanted)next.push('Choice '+(next.length+1))}
+ else if(next.length>wanted)next=next.slice(0,wanted);
+ wheelItems=next;$('wheelOptions').value=wheelItems.join('\n');$('wheelSlotCount').value=wheelItems.length;
+ wheelAngle=0;drawWheel();$('wheelResult').textContent=tr('spinHint');
+}
+$('applyWheel').onclick=updateWheel;
+$('wheelSlotCount').addEventListener('change',updateWheel);
+$('resetWheel').onclick=()=>{$('wheelOptions').value='Pizza\nSushi\nBurger\nPasta\nSalad\nTacos';$('wheelSlotCount').value=6;updateWheel()};
+updateWheel();
+let lastWheelWinnerIndex=-1;
+$('wheel').addEventListener('dblclick',e=>{
+ if(wheelBusy||!wheelItems.length)return;
+ const rect=$('wheel').getBoundingClientRect(),scale=440/rect.width,x=(e.clientX-rect.left)*scale-220,y=(e.clientY-rect.top)*scale-220;
+ const radius=Math.hypot(x,y);if(radius>205||radius<28)return;
+ let angle=Math.atan2(y,x)+Math.PI/2-wheelAngle;angle=((angle%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+ const idx=Math.floor(angle/(Math.PI*2/wheelItems.length));const edited=prompt('Edit this wheel choice:',wheelItems[idx]);
+ if(edited===null)return;wheelItems[idx]=edited.trim()||wheelItems[idx];$('wheelOptions').value=wheelItems.join('\n');drawWheel();
+});
+$('spinBtn').onclick=()=>{
+ if(wheelBusy)return;if(!wheelItems.length){$('wheelResult').textContent=tr('invalid');return}
+ wheelBusy=true;const win=randInt(wheelItems.length),step=2*Math.PI/wheelItems.length,current=((wheelAngle%(2*Math.PI))+2*Math.PI)%(2*Math.PI),target=-((win*step+step/2));
+ let delta=((target-current)%(2*Math.PI)+2*Math.PI)%(2*Math.PI)+Math.PI*2*6,start=wheelAngle,duration=4200,t0=performance.now();
+ function anim(t){let x=Math.min(1,(t-t0)/duration),ease=1-Math.pow(1-x,4);wheelAngle=start+delta*ease;drawWheel();if(x<1)requestAnimationFrame(anim);else{wheelAngle=((wheelAngle%(2*Math.PI))+2*Math.PI)%(2*Math.PI);drawWheel();lastWheelWinnerIndex=win;$('wheelResult').innerHTML='<strong>'+esc(wheelItems[win])+'</strong>';wheelBusy=false}}
+ requestAnimationFrame(anim)
+};
+$('removeWinner').onclick=()=>{
+ if(lastWheelWinnerIndex<0||lastWheelWinnerIndex>=wheelItems.length)return;
+ wheelItems.splice(lastWheelWinnerIndex,1);lastWheelWinnerIndex=-1;$('wheelOptions').value=wheelItems.join('\n');$('wheelSlotCount').value=Math.max(2,wheelItems.length);
+ drawWheel();$('wheelResult').textContent=wheelItems.length?tr('done'):tr('invalid')
+};
+
+function makeLadder(){
+ const p=lines('ladderPlayers'),o=lines('ladderOutcomes');
+ if(p.length<2||p.length!==o.length||p.length>12){$('ladderResult').textContent=tr('invalid');return}
+ const n=p.length,rows=9+randInt(5),rungs=[];
+ for(let y=0;y<rows;y++){let row=Array(n-1).fill(false);for(let x=0;x<n-1;x++){if((x===0||!row[x-1])&&randInt(100)<43)row[x]=true}rungs.push(row)}
+ ladderData={p,o:shuffle(o),rungs,rows,paths:[]};drawLadder(false);$('ladderResult').textContent=tr('ladderHint')
+}
+function drawLadder(reveal){
+ const c=$('ladderCanvas'),ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);
+ if(!ladderData){ctx.fillStyle='#a9b6cc';ctx.font='18px Arial';ctx.textAlign='center';ctx.fillText('Create a ladder',450,210);return}
+ const {p,o,rungs,rows}=ladderData,n=p.length,left=65,right=835,top=78,bottom=350,dx=(right-left)/(n-1),dy=(bottom-top)/rows;
+ ctx.lineWidth=4;ctx.strokeStyle='#7898ff';
+ for(let x=0;x<n;x++){ctx.beginPath();ctx.moveTo(left+x*dx,top-12);ctx.lineTo(left+x*dx,bottom+12);ctx.stroke()}
+ if(reveal){ctx.strokeStyle='#52cbbb';ctx.lineWidth=5;rungs.forEach((row,y)=>row.forEach((v,x)=>{if(v){ctx.beginPath();ctx.moveTo(left+x*dx,top+y*dy);ctx.lineTo(left+(x+1)*dx,top+y*dy);ctx.stroke()}}))}
+ ctx.font='bold 14px Arial';ctx.textAlign='center';
+ p.forEach((v,i)=>{ctx.fillStyle='#f4f7ff';ctx.fillText(v.slice(0,13),left+i*dx,30);ctx.fillStyle='#ffd166';ctx.fillText(o[i].slice(0,13),left+i*dx,410)});
+ if(reveal&&ladderData.paths){ctx.strokeStyle='#ffbf69';ctx.lineWidth=3;ladderData.paths.forEach((end,start)=>{let x=start;ctx.beginPath();ctx.moveTo(left+x*dx,top-12);for(let yy=0;yy<rows;yy++){ctx.lineTo(left+x*dx,top+yy*dy);if(x<n-1&&rungs[yy][x]){ctx.lineTo(left+(x+1)*dx,top+yy*dy);x++}else if(x>0&&rungs[yy][x-1]){ctx.lineTo(left+(x-1)*dx,top+yy*dy);x--}}ctx.lineTo(left+x*dx,bottom+12);ctx.stroke()})}
+}
 function traceLadder(start){let x=start;for(let y=0;y<ladderData.rows;y++){if(x<ladderData.p.length-1&&ladderData.rungs[y][x])x++;else if(x>0&&ladderData.rungs[y][x-1])x--}return x}
-$('makeLadder').onclick=makeLadder;$('shuffleLadder').onclick=()=>{$('ladderOutcomes').value=shuffle(lines('ladderOutcomes')).join('\n');makeLadder()};$('runLadder').onclick=()=>{if(!ladderData){makeLadder();if(!ladderData)return}ladderData.paths=ladderData.p.map((_,i)=>traceLadder(i));drawLadder(true);const html=ladderData.p.map((v,i)=>'<div class="listItem"><span>'+esc(v)+'</span><b>→ '+esc(ladderData.o[ladderData.paths[i]])+'</b></div>').join('');show('ladderResult','<div style="width:100%">'+html+'</div>')};drawLadder(false);
-$('rollDice').onclick=()=>{const sides=+$('diceSides').value,n=Math.max(1,Math.min(20,+$('diceCount').value||1)),vals=Array.from({length:n},()=>randInt(sides)+1),sum=vals.reduce((a,b)=>a+b,0);$('diceResult').innerHTML='<strong>'+vals.join('　')+'</strong><div>'+tr('total')+': '+sum+'</div>'; $('diceHistory').textContent=vals.join(', ')+' = '+sum};
-$('flipCoin').onclick=()=>{const n=+$('coinCount').value,vals=Array.from({length:n},()=>randInt(2)),h=vals.filter(x=>x===0).length,t=n-h;$('coinResult').innerHTML=n===1?'<strong>'+(h?tr('heads')+' 🟡':tr('tails')+' ⚪')+'</strong>':`<strong>${tr('heads')}: ${h} · ${tr('tails')}: ${t}</strong><div>${tr('total')}: ${n}</div>`;$('coinHistory').textContent=vals.map(x=>x===0?'H':'T').join(' · ')};
-$('pickNames').onclick=()=>{const a=lines('nameList'),n=Math.max(1,Math.min(100,+$('winnerCount').value||1)),unique=$('noRepeat').checked;if(!a.length){$('nameResult').textContent=tr('invalid');return}if(unique&&n>a.length){$('nameResult').textContent=tr('tooMany');return}let pool=[...a],res=[];for(let i=0;i<n;i++){const j=randInt(pool.length);res.push(pool[j]);if(unique)pool.splice(j,1)}show('nameResult','<div style="width:100%">'+res.map((x,i)=>'<div class="listItem"><span>'+(i+1)+'.</span><b>'+esc(x)+'</b></div>').join('')+'</div>')};
-$('makeTeams').onclick=()=>{let a=shuffle(lines('teamNames')),n=Math.max(2,Math.min(50,+$('teamCount').value||2));if(a.length<n){$('teamResult').textContent=tr('invalid');return}let teams=Array.from({length:n},()=>[]);a.forEach((v,i)=>teams[i%n].push(v));show('teamResult','<div style="width:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px">'+teams.map((t,i)=>'<div class="listItem" style="display:block"><b>'+tr('team')+' '+(i+1)+'</b>'+t.map(v=>'<div style="margin-top:6px">'+esc(v)+'</div>').join('')+'</div>').join('')+'</div>')};
+$('makeLadder').onclick=makeLadder;
+$('shuffleLadder').onclick=()=>{$('ladderOutcomes').value=shuffle(lines('ladderOutcomes')).join('\n');makeLadder()};
+$('runLadder').onclick=()=>{
+ if(!ladderData){makeLadder();if(!ladderData)return}
+ ladderData.paths=ladderData.p.map((_,i)=>traceLadder(i));drawLadder(true);
+ const html=ladderData.p.map((v,i)=>'<div class="listItem"><span>'+esc(v)+'</span><b>→ '+esc(ladderData.o[ladderData.paths[i]])+'</b></div>').join('');
+ show('ladderResult','<div style="width:100%">'+html+'</div>')
+};
+drawLadder(false);
+$('rollDice').onclick=()=>{
+ const sides=+$('diceSides').value,n=Math.max(1,Math.min(20,+$('diceCount').value||1));
+ const vals=Array.from({length:n},()=>randInt(sides)+1),sum=vals.reduce((a,b)=>a+b,0),stage=$('diceStage');
+ stage.innerHTML=Array.from({length:n},()=>'<div class="die rolling">⚄</div>').join('');
+ setTimeout(()=>{stage.innerHTML=vals.map(v=>'<div class="die">'+(sides===6?['','⚀','⚁','⚂','⚃','⚄','⚅'][v]:'D'+sides+'<br>'+v)+'</div>').join('');$('diceResult').innerHTML='<strong>'+vals.join('　')+'</strong><div>'+tr('total')+': '+sum+'</div>';$('diceHistory').textContent=vals.join(', ')+' = '+sum},820)
+};
+$('flipCoin').onclick=()=>{
+ const n=+$('coinCount').value,vals=Array.from({length:n},()=>randInt(2)),h=vals.filter(x=>x===0).length,t=n-h,stage=$('coinStage');
+ stage.innerHTML='<div class="coin3d flipping">🪙</div>';
+ setTimeout(()=>{stage.innerHTML='<div class="coin3d">'+(n===1?(vals[0]===0?tr('heads'):tr('tails')):'🪙')+'</div>';$('coinResult').innerHTML=n===1?'<strong>'+(h?tr('heads')+' 🟡':tr('tails')+' ⚪')+'</strong>':`<strong>${tr('heads')}: ${h} · ${tr('tails')}: ${t}</strong><div>${tr('total')}: ${n}</div>`;$('coinHistory').textContent=vals.map(x=>x===0?'H':'T').join(' · ')},1180)
+};
+$('pickNames').onclick=()=>{
+ const a=lines('nameList'),n=Math.max(1,Math.min(100,+$('winnerCount').value||1)),unique=$('noRepeat').checked;
+ if(!a.length){$('nameResult').textContent=tr('invalid');return}if(unique&&n>a.length){$('nameResult').textContent=tr('tooMany');return}
+ let pool=[...a],res=[];for(let i=0;i<n;i++){const j=randInt(pool.length);res.push(pool[j]);if(unique)pool.splice(j,1)}
+ const stage=$('capsuleStage');stage.innerHTML='<div class="capsule shaking"></div><div class="muted">Opening capsule…</div>';
+ $('nameResult').textContent='…';
+ setTimeout(()=>{stage.innerHTML='<div class="capsule open"></div><div style="font-size:24px">✨</div>';show('nameResult','<div style="width:100%">'+res.map((x,i)=>'<div class="listItem"><span>'+(i+1)+'.</span><b>'+esc(x)+'</b></div>').join('')+'</div>')},1250)
+};
+$('makeTeams').onclick=()=>{
+ let a=shuffle(lines('teamNames')),n=Math.max(2,Math.min(50,+$('teamCount').value||2));
+ if(a.length<n){$('teamResult').textContent=tr('invalid');return}
+ let teams=Array.from({length:n},()=>[]);a.forEach((v,i)=>teams[i%n].push(v));
+ const palette=['linear-gradient(145deg,#315b9b,#243b67)','linear-gradient(145deg,#18796f,#164d58)','linear-gradient(145deg,#8b5a9f,#503c78)','linear-gradient(145deg,#a86a35,#654322)','linear-gradient(145deg,#3d7b9c,#244d69)','linear-gradient(145deg,#8a5263,#573344)','linear-gradient(145deg,#5b7e43,#344d2e)','linear-gradient(145deg,#6d65a5,#403b70)'];
+ show('teamResult','<div class="teamGrid">'+teams.map((t,i)=>'<div class="teamCard" style="background:'+palette[i%palette.length]+'"><h4>👥 '+tr('team')+' '+(i+1)+' <small>('+t.length+')</small></h4>'+t.map(v=>'<div class="teamMember">'+esc(v)+'</div>').join('')+'</div>').join('')+'</div>')
+};
 $('generateNumbers').onclick=()=>{let min=+$('numMin').value,max=+$('numMax').value,n=Math.max(1,Math.min(100,+$('numCount').value||1)),unique=$('numUnique').checked;if(!Number.isSafeInteger(min)||!Number.isSafeInteger(max)||max<min){$('numberResult').textContent=tr('invalid');return}const span=max-min+1;if(!Number.isSafeInteger(span)||span>4294967296||(unique&&n>span)){ $('numberResult').textContent=tr('tooMany');return}let vals=[];if(unique){const picked=new Set();while(picked.size<n)picked.add(randInt(span));vals=Array.from(picked,v=>min+v)}else vals=Array.from({length:n},()=>min+randInt(span));$('numberResult').innerHTML='<strong>'+vals.join(' · ')+'</strong>'};
 $('yesNo').onclick=()=>{const answers=lang==='ko'?['네!','아니요.','이번에는 보류!']:lang==='ja'?['はい！','いいえ。','今回は保留！']:lang==='zh'?['是！','不是。','暂时再想想！']:['Yes!','No.','Maybe later!'];$('yesResult').innerHTML='<strong>'+answers[randInt(answers.length)]+'</strong>'};
 $('shuffleListBtn').onclick=()=>{const a=lines('shuffleList');if(!a.length){$('shuffleResult').textContent=tr('invalid');return}show('shuffleResult','<div style="width:100%">'+shuffle(a).map((x,i)=>'<div class="listItem"><span>'+(i+1)+'.</span><b>'+esc(x)+'</b></div>').join('')+'</div>')};
