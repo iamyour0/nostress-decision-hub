@@ -71,22 +71,19 @@ footer{text-align:center;color:#7788a6;font-size:12px;padding:22px}
 .wheelPopup .btn{padding:9px 11px;font-size:13px}
 .wheelPopupTitle{font-weight:800;margin-bottom:8px}
 
-/* Dice */
-.visualStage{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;min-height:150px;padding:15px;background:#0b1729;border:1px solid var(--line);border-radius:14px;margin:12px 0;perspective:900px}
-.die{width:76px;height:76px;flex:0 0 76px;border-radius:17px;background:linear-gradient(145deg,#fff 0%,#e7edf8 42%,#b9c7dc 100%);color:#172238;box-shadow:inset -5px -6px 10px #8795ad,inset 4px 4px 9px #fff,0 9px 18px #0007;display:grid;place-items:center;font-size:25px;font-weight:900;position:relative;transform-style:preserve-3d}
-.die.rolling{animation:dieRoll 1s cubic-bezier(.16,.8,.2,1) infinite}
-@keyframes dieRoll{
- 0%{transform:translateY(0) rotateX(0) rotateY(0) rotateZ(0)}
- 20%{transform:translateY(-22px) rotateX(130deg) rotateY(110deg) rotateZ(35deg)}
- 45%{transform:translateY(2px) rotateX(280deg) rotateY(250deg) rotateZ(100deg)}
- 70%{transform:translateY(-13px) rotateX(410deg) rotateY(390deg) rotateZ(170deg)}
- 100%{transform:translateY(0) rotateX(540deg) rotateY(520deg) rotateZ(360deg)}
-}
-.pipFace{width:100%;height:100%;padding:11px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:3px}
-.pip{width:11px;height:11px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#53617a,#172238 75%);align-self:center;justify-self:center;box-shadow:inset 1px 1px 2px #0008}
-.dieText{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:14px}
+/* Dice: real six-faced 3D cube */
+.visualStage{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap;min-height:190px;padding:22px;background:#0b1729;border:1px solid var(--line);border-radius:14px;margin:12px 0;perspective:900px;perspective-origin:50% 45%}
+.die{width:82px;height:82px;flex:0 0 82px;position:relative;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.2,.75,.25,1);filter:drop-shadow(0 9px 9px #0007)}
+.die.rolling{animation:dieRoll 1.05s linear infinite}
+@keyframes dieRoll{0%{transform:translateY(0) rotateX(0) rotateY(0) rotateZ(0)}25%{transform:translateY(-24px) rotateX(180deg) rotateY(135deg) rotateZ(65deg)}50%{transform:translateY(3px) rotateX(360deg) rotateY(270deg) rotateZ(130deg)}75%{transform:translateY(-15px) rotateX(540deg) rotateY(405deg) rotateZ(195deg)}100%{transform:translateY(0) rotateX(720deg) rotateY(540deg) rotateZ(260deg)}}
+.cubeFace{position:absolute;inset:0;width:82px;height:82px;border:2px solid #9eabc0;border-radius:12px;background:linear-gradient(145deg,#fff 0%,#edf2fa 48%,#c1cce0 100%);box-shadow:inset -5px -6px 10px #8795ad,inset 4px 4px 9px #fff;backface-visibility:hidden;color:#172238;display:grid;place-items:center;overflow:hidden}
+.cubeFace.front{transform:translateZ(41px)}.cubeFace.back{transform:rotateY(180deg) translateZ(41px)}.cubeFace.right{transform:rotateY(90deg) translateZ(41px)}.cubeFace.left{transform:rotateY(-90deg) translateZ(41px)}.cubeFace.top{transform:rotateX(-90deg) translateZ(41px)}.cubeFace.bottom{transform:rotateX(90deg) translateZ(41px)}
+.pipFace{width:100%;height:100%;padding:12px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:3px}
+.pip{width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#53617a,#172238 75%);align-self:center;justify-self:center;box-shadow:inset 1px 1px 2px #0008}
+.dieText{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:13px;font-weight:800;text-align:center}
 .dieText strong{font-size:25px}
-
+.ladderEditPopup{position:absolute;z-index:30;display:none;width:220px;padding:10px;background:#f8fbff;color:#172238;border:1px solid #cbd8ef;border-radius:12px;box-shadow:0 12px 30px #0008}
+.ladderEditPopup label{color:#43516a;margin:0 0 5px}.ladderEditPopup input{background:#fff;color:#172238;border-color:#b9c8df;padding:9px}.ladderEditPopup .row{margin-top:8px}.ladderEditPopup .btn{padding:8px 10px;font-size:12px}
 /* Coin */
 .coin3d{width:92px;height:92px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 30% 25%,#fff0a8,#e5ad32 52%,#986314);border:6px double #f8d879;color:#67420b;font-weight:900;font-size:15px;box-shadow:0 8px 18px #0006;backface-visibility:hidden}
 .coin3d.flipping{animation:coinFlip 1.15s ease-in-out}
@@ -151,7 +148,7 @@ Tacos</textarea><div class="row"><button class="btn secondary" id="applyWheel" d
    </div>
   </article>
 
-  <article class="tool wide hidden" id="ladderTool">
+  <article class="tool wide hidden" id="ladderTool" style="position:relative">
    <div class="toolHead"><span class="toolIcon">🪜</span><div><h3 data-i18n="ladderTitle">Ladder Game</h3><div class="sub" data-i18n="ladderSub">Connect players to shuffled outcomes.</div></div></div>
    <div class="ladderLabels"><div><label data-i18n="players">Start points (one per line)</label><textarea id="ladderPlayers">Alex
 Blair
@@ -162,14 +159,14 @@ Juice
 Water</textarea></div></div>
    <div class="muted">Enter the same number of start and destination labels. Duplicate labels are allowed. The middle rungs stay hidden until you reveal the paths.</div>
    <div class="row"><button class="btn" id="makeLadder" data-i18n="makeLadder">Create ladder</button><button class="btn teal" id="runLadder" data-i18n="runLadder">Reveal paths</button><button class="btn secondary" id="shuffleLadder" data-i18n="shuffle">Shuffle outcomes</button></div>
-   <canvas id="ladderCanvas" width="900" height="430"></canvas><div class="result" id="ladderResult" data-i18n="ladderHint">Create a ladder to see the matches.</div>
+   <div id="ladderEditPopup" class="ladderEditPopup"><label id="ladderEditLabel">Edit name</label><input id="ladderEditInput" maxlength="60"><div class="row"><button class="btn" id="ladderEditSave">Save</button><button class="btn secondary" id="ladderEditCancel">Cancel</button></div></div><canvas id="ladderCanvas" width="900" height="430"></canvas><div class="result" id="ladderResult" data-i18n="ladderHint">Create a ladder to see the matches.</div>
    <div class="muted" data-i18n="ladderNote">The ladder is generated randomly in your browser. Each player gets one unique outcome.</div>
   </article>
 
   <article class="tool hidden" id="diceTool">
    <div class="toolHead"><span class="toolIcon">🎲</span><div><h3 data-i18n="diceTitle">Dice Roller</h3><div class="sub" data-i18n="diceSub">Roll standard or polyhedral dice.</div></div></div>
    <div class="row"><div><label data-i18n="sides">Number of sides</label><select id="diceSides"><option>4</option><option>6</option><option>8</option><option>10</option><option>12</option><option>20</option><option>100</option></select></div><div><label data-i18n="count">Number of dice</label><input id="diceCount" type="number" min="1" max="20" value="2"></div></div>
-   <button class="btn" id="rollDice" data-i18n="roll">ROLL DICE</button><div class="visualStage" id="diceStage"><div class="die">⚄</div><div class="die">⚂</div></div><div class="result" id="diceResult">🎲 🎲</div><div class="history" id="diceHistory"></div>
+   <button class="btn" id="rollDice" data-i18n="roll">ROLL DICE</button><div class="visualStage" id="diceStage"><div class="die"> </div><div class="die"> </div></div><div class="result" id="diceResult">🎲 🎲</div><div class="history" id="diceHistory"></div>
   </article>
 
   <article class="tool hidden" id="coinTool">
@@ -413,50 +410,24 @@ function makeLadder(){
 function drawLadder(reveal){
  const c=$("ladderCanvas"),ctx=c.getContext("2d");
  ctx.clearRect(0,0,c.width,c.height);
- if(!ladderData){
-  ladderData=createLadderData(["Alex","Blair","Casey","Drew"],["Coffee","Tea","Juice","Water"]);
- }
+ if(!ladderData)ladderData=createLadderData(["Alex","Blair","Casey","Drew"],["Coffee","Tea","Juice","Water"]);
  const {p,o,rungs,rows}=ladderData,n=p.length;
  const left=65,right=835,top=78,bottom=350,dx=(right-left)/(n-1),dy=(bottom-top)/rows;
- const bg="#0b1729";
- ctx.lineCap="round";ctx.lineJoin="round";
- /* Vertical rails */
+ const bg="#0b1729";ctx.lineCap="round";ctx.lineJoin="round";
+ // Draw the complete real ladder first; the unrevealed mask is applied over it as one solid panel.
  ctx.lineWidth=4;ctx.strokeStyle="#7898ff";
- for(let x=0;x<n;x++){
-  ctx.beginPath();ctx.moveTo(left+x*dx,top-12);ctx.lineTo(left+x*dx,bottom+12);ctx.stroke();
- }
- /* Horizontal connections */
- rungs.forEach((row,y)=>row.forEach((v,x)=>{
-  if(!v)return;
-  const yPos=top+y*dy,x1=left+x*dx,x2=left+(x+1)*dx;
-  ctx.strokeStyle=reveal?"#52cbbb":"#9bb0d0";
-  ctx.lineWidth=5;
-  ctx.beginPath();ctx.moveTo(x1,yPos);ctx.lineTo(x2,yPos);ctx.stroke();
-  if(!reveal){
-   /* White mask conceals the center of each connector during selection */
-   const maskW=Math.min(42,(x2-x1)*.42);
-   ctx.fillStyle="#ffffff";
-   ctx.fillRect((x1+x2-maskW)/2,yPos-5,maskW,10);
-  }
- }));
- /* Labels */
+ for(let x=0;x<n;x++){ctx.beginPath();ctx.moveTo(left+x*dx,top-12);ctx.lineTo(left+x*dx,bottom+12);ctx.stroke()}
+ rungs.forEach((row,y)=>row.forEach((v,x)=>{if(!v)return;const yy=top+y*dy,x1=left+x*dx,x2=left+(x+1)*dx;ctx.strokeStyle="#52cbbb";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x1,yy);ctx.lineTo(x2,yy);ctx.stroke()}));
+ // Name labels remain outside the central concealed path.
  ctx.font="bold 14px Arial";ctx.textAlign="center";
- p.forEach((v,i)=>{
-  ctx.fillStyle="#f4f7ff";ctx.fillText(v.slice(0,13),left+i*dx,30);
-  ctx.fillStyle="#ffd166";ctx.fillText(o[i].slice(0,13),left+i*dx,410);
- });
- /* Reveal paths only after the reveal action */
- if(reveal&&ladderData.paths){
+ p.forEach((v,i)=>{ctx.fillStyle="#f4f7ff";ctx.fillText(v.slice(0,16),left+i*dx,30);ctx.fillStyle="#ffd166";ctx.fillText(o[i].slice(0,16),left+i*dx,410)});
+ // Keep visible endpoint markers, but hide EVERY internal rail and rung in preview.
+ if(!reveal){
+  ctx.fillStyle=bg;ctx.fillRect(left-24,top-18,(right-left)+48,(bottom-top)+36);
+  ctx.fillStyle="#7898ff";for(let i=0;i<n;i++){ctx.beginPath();ctx.arc(left+i*dx,top-18,5,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(left+i*dx,bottom+18,5,0,Math.PI*2);ctx.fill()}
+ }else if(ladderData.paths){
   ctx.strokeStyle="#ffbf69";ctx.lineWidth=3;
-  ladderData.paths.forEach((end,start)=>{
-   let x=start;ctx.beginPath();ctx.moveTo(left+x*dx,top-12);
-   for(let yy=0;yy<rows;yy++){
-    ctx.lineTo(left+x*dx,top+yy*dy);
-    if(x<n-1&&rungs[yy][x]){ctx.lineTo(left+(x+1)*dx,top+yy*dy);x++}
-    else if(x>0&&rungs[yy][x-1]){ctx.lineTo(left+(x-1)*dx,top+yy*dy);x--}
-   }
-   ctx.lineTo(left+x*dx,bottom+12);ctx.stroke();
-  });
+  ladderData.paths.forEach((end,start)=>{let x=start;ctx.beginPath();ctx.moveTo(left+x*dx,top-12);for(let yy=0;yy<rows;yy++){ctx.lineTo(left+x*dx,top+yy*dy);if(x<n-1&&rungs[yy][x]){ctx.lineTo(left+(x+1)*dx,top+yy*dy);x++}else if(x>0&&rungs[yy][x-1]){ctx.lineTo(left+(x-1)*dx,top+yy*dy);x--}}ctx.lineTo(left+x*dx,bottom+12);ctx.stroke()});
  }
 }
 function traceLadder(start){
@@ -481,33 +452,42 @@ $("runLadder").onclick=()=>{
  const html=ladderData.p.map((v,i)=>'<div class="listItem"><span>'+esc(v)+'</span><b>→ '+esc(ladderData.o[ladderData.paths[i]])+'</b></div>').join("");
  show("ladderResult",'<div style="width:100%">'+html+"</div>");
 };
+// Double-click a start or destination label to edit it in a small popup at that location.
+let ladderEditTarget=null;
+function closeLadderEdit(){$("ladderEditPopup").style.display="none";ladderEditTarget=null;}
+$("ladderCanvas").addEventListener("dblclick",e=>{
+ if(!ladderData)return;const c=$("ladderCanvas"),r=c.getBoundingClientRect(),scaleX=c.width/r.width,scaleY=c.height/r.height;
+ const x=(e.clientX-r.left)*scaleX,y=(e.clientY-r.top)*scaleY;
+ if(y>55&&y<385)return;const n=ladderData.p.length,left=65,right=835,dx=(right-left)/(n-1),idx=Math.max(0,Math.min(n-1,Math.round((x-left)/dx)));
+ ladderEditTarget={kind:y<=55?"p":"o",idx};const popup=$("ladderEditPopup"),host=c.parentElement,hr=host.getBoundingClientRect();
+ popup.style.display="block";popup.style.left=Math.max(8,Math.min(hr.width-228,e.clientX-hr.left+8))+"px";popup.style.top=Math.max(8,Math.min(hr.height-130,e.clientY-hr.top+8))+"px";
+ $("ladderEditLabel").textContent=y<=55?"Edit start name":"Edit destination name";$("ladderEditInput").value=ladderData[ladderEditTarget.kind][idx];$("ladderEditInput").focus();$("ladderEditInput").select();
+});
+$("ladderEditSave").onclick=()=>{if(!ladderEditTarget)return;const v=$("ladderEditInput").value.trim();if(v){ladderData[ladderEditTarget.kind][ladderEditTarget.idx]=v;$(ladderEditTarget.kind==="p"?"ladderPlayers":"ladderOutcomes").value=ladderData[ladderEditTarget.kind].join("\n");drawLadder(!!ladderData.revealed)}closeLadderEdit();};
+$("ladderEditCancel").onclick=closeLadderEdit;
+$("ladderEditInput").addEventListener("keydown",e=>{if(e.key==="Enter")$("ladderEditSave").click();if(e.key==="Escape")closeLadderEdit();});
 /* Show a sample ladder immediately, before the user presses Create ladder. */
 ladderData=createLadderData(["Alex","Blair","Casey","Drew"],["Coffee","Tea","Juice","Water"]);
 drawLadder(false);
 
-/* DICE */
-function diceFace(value,sides){
- if(sides!==6){
-  return '<div class="dieText">D'+sides+'<strong>'+value+'</strong></div>';
- }
- const positions={
-  1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],
-  5:[0,2,4,6,8],6:[0,2,3,5,6,8]
- };
- const dots=positions[value]||positions[1];
- return '<div class="pipFace">'+Array.from({length:9},(_,i)=>dots.includes(i)?'<span class="pip"></span>':"<span></span>").join("")+"</div>";
+/* DICE: each die is a true CSS 3D cube with six separately oriented faces. */
+const pipPositions={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
+const cubeFinal={1:"rotateX(-90deg)",6:"rotateX(90deg)",3:"rotateZ(90deg)",4:"rotateZ(-90deg)",2:"rotateX(0deg)",5:"rotateX(180deg)"};
+function faceContent(value,sides){
+ if(sides!==6)return '<div class="dieText">D'+sides+'<strong>'+value+'</strong></div>';
+ const dots=pipPositions[value]||pipPositions[1];return '<div class="pipFace">'+Array.from({length:9},(_,i)=>dots.includes(i)?'<span class="pip"></span>':"<span></span>").join("")+"</div>";
 }
+function cubeMarkup(value,sides,rolling=false){
+ const faces=[{name:"front",v:1},{name:"back",v:6},{name:"right",v:3},{name:"left",v:4},{name:"top",v:2},{name:"bottom",v:5}];
+ const html=faces.map(f=>'<div class="cubeFace '+f.name+'">'+faceContent(sides===6?f.v:(f.name==="top"?value:Math.max(1,randInt(sides)+1)),sides)+'</div>').join("");
+ return '<div class="die'+(rolling?' rolling':'')+'"'+(rolling?'':' style="transform:'+cubeFinal[value]+'"')+'>'+html+'</div>';
+}
+$("diceStage").innerHTML=cubeMarkup(1,6)+cubeMarkup(5,6);
 $("rollDice").onclick=()=>{
  const sides=+$("diceSides").value,n=Math.max(1,Math.min(20,+$("diceCount").value||1));
- const vals=Array.from({length:n},()=>randInt(sides)+1);
- const sum=vals.reduce((a,b)=>a+b,0),stage=$("diceStage");
- stage.innerHTML=Array.from({length:n},()=>'<div class="die rolling">⚄</div>').join("");
- $("diceResult").textContent="🎲 Rolling...";
- setTimeout(()=>{
-  stage.innerHTML=vals.map(v=>'<div class="die">'+diceFace(v,sides)+"</div>").join("");
-  $("diceResult").innerHTML="<strong>"+vals.join("　")+"</strong><div>"+tr("total")+": "+sum+"</div>";
-  $("diceHistory").textContent=vals.join(", ")+" = "+sum;
- },1050);
+ const vals=Array.from({length:n},()=>randInt(sides)+1),sum=vals.reduce((a,b)=>a+b,0),stage=$("diceStage");
+ stage.innerHTML=Array.from({length:n},()=>cubeMarkup(1,sides,true)).join("");$("diceResult").textContent="🎲 Rolling...";
+ setTimeout(()=>{stage.innerHTML=vals.map(v=>cubeMarkup(v,sides,false)).join("");$("diceResult").innerHTML="<strong>"+vals.join("　")+"</strong><div>"+tr("total")+": "+sum+"</div>";$("diceHistory").textContent=vals.join(", ")+" = "+sum;},1250);
 };
 
 /* COIN */
