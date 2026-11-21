@@ -71,17 +71,17 @@ footer{text-align:center;color:#7788a6;font-size:12px;padding:22px}
 .wheelPopup .btn{padding:9px 11px;font-size:13px}
 .wheelPopupTitle{font-weight:800;margin-bottom:8px}
 
-/* Dice: real six-faced 3D cube */
-.visualStage{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap;min-height:190px;padding:22px;background:#0b1729;border:1px solid var(--line);border-radius:14px;margin:12px 0;perspective:900px;perspective-origin:50% 45%}
-.die{width:82px;height:82px;flex:0 0 82px;position:relative;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.2,.75,.25,1);filter:drop-shadow(0 9px 9px #0007)}
-.die.rolling{animation:dieRoll 1.05s linear infinite}
-@keyframes dieRoll{0%{transform:translateY(0) rotateX(0) rotateY(0) rotateZ(0)}25%{transform:translateY(-24px) rotateX(180deg) rotateY(135deg) rotateZ(65deg)}50%{transform:translateY(3px) rotateX(360deg) rotateY(270deg) rotateZ(130deg)}75%{transform:translateY(-15px) rotateX(540deg) rotateY(405deg) rotateZ(195deg)}100%{transform:translateY(0) rotateX(720deg) rotateY(540deg) rotateZ(260deg)}}
-.cubeFace{position:absolute;inset:0;width:82px;height:82px;border:2px solid #9eabc0;border-radius:12px;background:linear-gradient(145deg,#fff 0%,#edf2fa 48%,#c1cce0 100%);box-shadow:inset -5px -6px 10px #8795ad,inset 4px 4px 9px #fff;backface-visibility:hidden;color:#172238;display:grid;place-items:center;overflow:hidden}
-.cubeFace.front{transform:translateZ(41px)}.cubeFace.back{transform:rotateY(180deg) translateZ(41px)}.cubeFace.right{transform:rotateY(90deg) translateZ(41px)}.cubeFace.left{transform:rotateY(-90deg) translateZ(41px)}.cubeFace.top{transform:rotateX(-90deg) translateZ(41px)}.cubeFace.bottom{transform:rotateX(90deg) translateZ(41px)}
-.pipFace{width:100%;height:100%;padding:12px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:3px}
-.pip{width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#53617a,#172238 75%);align-self:center;justify-self:center;box-shadow:inset 1px 1px 2px #0008}
-.dieText{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:13px;font-weight:800;text-align:center}
-.dieText strong{font-size:25px}
+/* Dice: responsive grid of solid 3D cubes */
+.visualStage{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:20px;min-height:150px;padding:22px;background:#0b1729;border:1px solid var(--line);border-radius:14px;margin:12px 0;perspective:1100px;perspective-origin:50% 45%;overflow:visible}
+.die{width:72px;height:72px;position:relative;flex:0 0 72px;transform-style:preserve-3d;filter:drop-shadow(0 12px 10px #0009);transform-origin:50% 50%;transform:rotateX(-22deg) rotateY(-28deg);}
+.die.rolling{animation:dieRoll 1.05s cubic-bezier(.35,.02,.2,.98) infinite}
+@keyframes dieRoll{0%{transform:translate3d(0,0,0) rotateX(0) rotateY(0) rotateZ(0) scale(1)}15%{transform:translate3d(-13px,-34px,28px) rotateX(260deg) rotateY(220deg) rotateZ(130deg) scale(1.12)}32%{transform:translate3d(15px,5px,-22px) rotateX(610deg) rotateY(520deg) rotateZ(290deg) scale(.96)}50%{transform:translate3d(-9px,-39px,32px) rotateX(980deg) rotateY(850deg) rotateZ(470deg) scale(1.16)}68%{transform:translate3d(12px,3px,-18px) rotateX(1330deg) rotateY(1190deg) rotateZ(650deg) scale(.98)}84%{transform:translate3d(-5px,-22px,16px) rotateX(1630deg) rotateY(1510deg) rotateZ(790deg) scale(1.08)}100%{transform:translate3d(0,0,0) rotateX(1980deg) rotateY(1800deg) rotateZ(900deg) scale(1)}}
+.cubeFace{position:absolute;inset:0;width:72px;height:72px;border:2px solid #9eabc0;border-radius:10px;background:linear-gradient(145deg,#fff 0%,#edf2fa 48%,#b7c4da 100%);box-shadow:inset -6px -7px 10px #8795ad,inset 4px 4px 9px #fff;backface-visibility:hidden;color:#172238;display:grid;place-items:center;overflow:hidden}
+.cubeFace.front{transform:translateZ(36px)}.cubeFace.back{transform:rotateY(180deg) translateZ(36px)}.cubeFace.right{transform:rotateY(90deg) translateZ(36px)}.cubeFace.left{transform:rotateY(-90deg) translateZ(36px)}.cubeFace.top{transform:rotateX(90deg) translateZ(36px)}.cubeFace.bottom{transform:rotateX(-90deg) translateZ(36px)}
+.pipFace{width:100%;height:100%;padding:8px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:2px}
+.pip{width:10px;height:10px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#53617a,#172238 75%);align-self:center;justify-self:center;box-shadow:inset 1px 1px 2px #0008}
+.dieText{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;font-weight:800;text-align:center}.dieText strong{font-size:23px}
+@media(max-width:520px){.visualStage{gap:12px;padding:16px 8px}.die,.cubeFace{width:58px;height:58px;flex-basis:58px}.cubeFace.front{transform:translateZ(29px)}.cubeFace.back{transform:rotateY(180deg) translateZ(29px)}.cubeFace.right{transform:rotateY(90deg) translateZ(29px)}.cubeFace.left{transform:rotateY(-90deg) translateZ(29px)}.cubeFace.top{transform:rotateX(90deg) translateZ(29px)}.cubeFace.bottom{transform:rotateX(-90deg) translateZ(29px)}.pip{width:8px;height:8px}}
 .ladderEditPopup{position:absolute;z-index:30;display:none;width:220px;padding:10px;background:#f8fbff;color:#172238;border:1px solid #cbd8ef;border-radius:12px;box-shadow:0 12px 30px #0008}
 .ladderEditPopup label{color:#43516a;margin:0 0 5px}.ladderEditPopup input{background:#fff;color:#172238;border-color:#b9c8df;padding:9px}.ladderEditPopup .row{margin-top:8px}.ladderEditPopup .btn{padding:8px 10px;font-size:12px}
 /* Coin */
@@ -165,7 +165,7 @@ Water</textarea></div></div>
 
   <article class="tool hidden" id="diceTool">
    <div class="toolHead"><span class="toolIcon">🎲</span><div><h3 data-i18n="diceTitle">Dice Roller</h3><div class="sub" data-i18n="diceSub">Roll standard or polyhedral dice.</div></div></div>
-   <div class="row"><div><label data-i18n="sides">Number of sides</label><select id="diceSides"><option>4</option><option>6</option><option>8</option><option>10</option><option>12</option><option>20</option><option>100</option></select></div><div><label data-i18n="count">Number of dice</label><input id="diceCount" type="number" min="1" max="20" value="2"></div></div>
+   <div class="row"><div><label data-i18n="sides">Number of sides</label><select id="diceSides"><option>4</option><option selected>6</option><option>8</option><option>10</option><option>12</option><option>20</option><option>100</option></select></div><div><label data-i18n="count">Number of dice</label><input id="diceCount" type="number" min="1" max="20" value="2"></div></div>
    <button class="btn" id="rollDice" data-i18n="roll">ROLL DICE</button><div class="visualStage" id="diceStage"><div class="die"> </div><div class="die"> </div></div><div class="result" id="diceResult">🎲 🎲</div><div class="history" id="diceHistory"></div>
   </article>
 
@@ -421,10 +421,22 @@ function drawLadder(reveal){
  // Name labels remain outside the central concealed path.
  ctx.font="bold 14px Arial";ctx.textAlign="center";
  p.forEach((v,i)=>{ctx.fillStyle="#f4f7ff";ctx.fillText(v.slice(0,16),left+i*dx,30);ctx.fillStyle="#ffd166";ctx.fillText(o[i].slice(0,16),left+i*dx,410)});
- // Keep visible endpoint markers, but hide EVERY internal rail and rung in preview.
+ // Cover the central ladder with a visible opaque paper-like concealment panel.
  if(!reveal){
-  ctx.fillStyle=bg;ctx.fillRect(left-24,top-18,(right-left)+48,(bottom-top)+36);
-  ctx.fillStyle="#7898ff";for(let i=0;i<n;i++){ctx.beginPath();ctx.arc(left+i*dx,top-18,5,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(left+i*dx,bottom+18,5,0,Math.PI*2);ctx.fill()}
+  const mx=left-28,my=top-20,mw=(right-left)+56,mh=(bottom-top)+40;
+  ctx.save();
+  ctx.shadowColor="#0009";ctx.shadowBlur=18;ctx.shadowOffsetY=7;
+  const panel=ctx.createLinearGradient(mx,my,mx+mw,my+mh);panel.addColorStop(0,"#25364d");panel.addColorStop(.48,"#1b2a40");panel.addColorStop(1,"#263950");
+  ctx.fillStyle=panel;ctx.beginPath();ctx.roundRect(mx,my,mw,mh,14);ctx.fill();ctx.restore();
+  // subtle paper grain / diagonal hatch so the hidden area looks deliberately covered
+  ctx.save();ctx.beginPath();ctx.roundRect(mx,my,mw,mh,14);ctx.clip();
+  ctx.strokeStyle="#91a5c0";ctx.globalAlpha=.13;ctx.lineWidth=1;
+  for(let k=-mh;k<mw;k+=18){ctx.beginPath();ctx.moveTo(mx+k,my);ctx.lineTo(mx+k+mh,my+mh);ctx.stroke()}
+  ctx.globalAlpha=1;ctx.strokeStyle="#a9bdd7";ctx.lineWidth=2;ctx.setLineDash([7,7]);ctx.strokeRect(mx+8,my+8,mw-16,mh-16);ctx.setLineDash([]);
+  ctx.fillStyle="#d5e1f1";ctx.font="bold 14px Arial";ctx.textAlign="center";ctx.fillText("HIDDEN PATH",mx+mw/2,my+mh/2+5);ctx.restore();
+  // Short vertical endpoint ticks remain visible at the top and bottom.
+  ctx.strokeStyle="#91aaff";ctx.lineWidth=4;ctx.lineCap="round";
+  for(let i=0;i<n;i++){const xx=left+i*dx;ctx.beginPath();ctx.moveTo(xx,top-20);ctx.lineTo(xx,top-5);ctx.stroke();ctx.beginPath();ctx.moveTo(xx,bottom+5);ctx.lineTo(xx,bottom+20);ctx.stroke()}
  }else if(ladderData.paths){
   ctx.strokeStyle="#ffbf69";ctx.lineWidth=3;
   ladderData.paths.forEach((end,start)=>{let x=start;ctx.beginPath();ctx.moveTo(left+x*dx,top-12);for(let yy=0;yy<rows;yy++){ctx.lineTo(left+x*dx,top+yy*dy);if(x<n-1&&rungs[yy][x]){ctx.lineTo(left+(x+1)*dx,top+yy*dy);x++}else if(x>0&&rungs[yy][x-1]){ctx.lineTo(left+(x-1)*dx,top+yy*dy);x--}}ctx.lineTo(left+x*dx,bottom+12);ctx.stroke()});
@@ -470,24 +482,62 @@ $("ladderEditInput").addEventListener("keydown",e=>{if(e.key==="Enter")$("ladder
 ladderData=createLadderData(["Alex","Blair","Casey","Drew"],["Coffee","Tea","Juice","Water"]);
 drawLadder(false);
 
-/* DICE: each die is a true CSS 3D cube with six separately oriented faces. */
+/* DICE: every die's visible upper face, displayed value and total share one result array. */
 const pipPositions={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
-const cubeFinal={1:"rotateX(-90deg)",6:"rotateX(90deg)",3:"rotateZ(90deg)",4:"rotateZ(-90deg)",2:"rotateX(0deg)",5:"rotateX(180deg)"};
 function faceContent(value,sides){
- if(sides!==6)return '<div class="dieText">D'+sides+'<strong>'+value+'</strong></div>';
- const dots=pipPositions[value]||pipPositions[1];return '<div class="pipFace">'+Array.from({length:9},(_,i)=>dots.includes(i)?'<span class="pip"></span>':"<span></span>").join("")+"</div>";
+ if(sides!==6)return '<div class="dieText"><span>'+sides+'-SIDED</span><strong>'+value+'</strong></div>';
+ const dots=pipPositions[value]||pipPositions[1];
+ return '<div class="pipFace">'+Array.from({length:9},(_,i)=>dots.includes(i)?'<span class="pip"></span>':'<span></span>').join('')+'</div>';
 }
-function cubeMarkup(value,sides,rolling=false){
- const faces=[{name:"front",v:1},{name:"back",v:6},{name:"right",v:3},{name:"left",v:4},{name:"top",v:2},{name:"bottom",v:5}];
- const html=faces.map(f=>'<div class="cubeFace '+f.name+'">'+faceContent(sides===6?f.v:(f.name==="top"?value:Math.max(1,randInt(sides)+1)),sides)+'</div>').join("");
- return '<div class="die'+(rolling?' rolling':'')+'"'+(rolling?'':' style="transform:'+cubeFinal[value]+'"')+'>'+html+'</div>';
+function cubeMarkup(value,sides,rolling=false,index=0){
+ // While tumbling, update every visible face so no face appears stuck on 1.
+ // When stopped, put the actual result on the camera-facing front face;
+ // the other faces stay blank so the displayed result is unambiguous.
+ const faces=[
+  {name:'front',v:value},{name:'back',v:rolling?value:null},
+  {name:'right',v:rolling?value:null},{name:'left',v:rolling?value:null},
+  {name:'top',v:rolling?value:null},{name:'bottom',v:rolling?value:null}
+ ];
+ const html=faces.map(f=>'<div class="cubeFace '+f.name+'">'+(f.v===null?'':faceContent(f.v,sides))+'</div>').join('');
+ const motion=rolling?' style="animation-delay:-'+(index*.17)+'s;animation-duration:'+(0.72+(index%4)*.13)+'s"':'';
+ return '<div class="die'+(rolling?' rolling':'')+'"'+motion+'>'+html+'</div>';
 }
-$("diceStage").innerHTML=cubeMarkup(1,6)+cubeMarkup(5,6);
-$("rollDice").onclick=()=>{
- const sides=+$("diceSides").value,n=Math.max(1,Math.min(20,+$("diceCount").value||1));
- const vals=Array.from({length:n},()=>randInt(sides)+1),sum=vals.reduce((a,b)=>a+b,0),stage=$("diceStage");
- stage.innerHTML=Array.from({length:n},()=>cubeMarkup(1,sides,true)).join("");$("diceResult").textContent="🎲 Rolling...";
- setTimeout(()=>{stage.innerHTML=vals.map(v=>cubeMarkup(v,sides,false)).join("");$("diceResult").innerHTML="<strong>"+vals.join("　")+"</strong><div>"+tr("total")+": "+sum+"</div>";$("diceHistory").textContent=vals.join(", ")+" = "+sum;},1250);
+function renderDice(values,sides,rolling=false){
+ const stage=$('diceStage');
+ stage.innerHTML=values.map((v,i)=>cubeMarkup(v,sides,rolling,i)).join('');
+ stage.setAttribute('aria-label',values.length+' dice');
+}
+function diceCount(){return Math.max(1,Math.min(20,Math.floor(+$('diceCount').value)||1));}
+function updateDicePreview(){
+ const n=diceCount(),sides=+$('diceSides').value;
+ renderDice(Array.from({length:n},()=>1),sides,false);
+}
+$('diceCount').addEventListener('input',updateDicePreview);
+$('diceSides').addEventListener('change',updateDicePreview);
+updateDicePreview();
+$('rollDice').onclick=()=>{
+ const sides=+$('diceSides').value,n=diceCount();
+ const finalValues=Array.from({length:n},()=>randInt(sides)+1);
+ const sum=finalValues.reduce((a,b)=>a+b,0);
+ const btn=$('rollDice');
+ btn.disabled=true;
+ $('diceResult').textContent='🎲 Rolling…';
+ $('diceHistory').textContent='';
+ // Change the pips repeatedly during the tumble, independently for every die.
+ const rollFrame=()=>{
+  const movingValues=Array.from({length:n},()=>randInt(sides)+1);
+  renderDice(movingValues,sides,true);
+ };
+ rollFrame();
+ const interval=window.setInterval(rollFrame,115);
+ window.setTimeout(()=>{
+  window.clearInterval(interval);
+  // Stop on the final values. The same array drives the top-face pips and the total below.
+  renderDice(finalValues,sides,false);
+  $('diceResult').innerHTML='<strong>'+finalValues.join('　')+'</strong><div>'+tr('total')+': '+sum+'</div>';
+  $('diceHistory').textContent=finalValues.join(', ')+' = '+sum;
+  btn.disabled=false;
+ },2400);
 };
 
 /* COIN */
